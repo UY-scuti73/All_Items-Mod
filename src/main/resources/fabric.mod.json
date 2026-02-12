@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "id": "allitems73",
+  "version": "${version}",
+  "name": "All Items Mod",
+  "description": "",
+  "authors": [],
+  "contact": {},
+  "license": "All-Rights-Reserved",
+  "icon": "assets/allitems73/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "fabric-datagen": [
+      "xyz.quazaros.allitems73.client.Allitems73DataGenerator"
+    ],
+    "client": [
+      "xyz.quazaros.allitems73.client.Allitems73Client"
+    ],
+    "main": [
+      "xyz.quazaros.allitems73.main"
+    ]
+  },
+  "mixins": [
+    "allitems73.mixins.json",
+    {
+      "config": "allitems73.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric-api": "*",
+    "minecraft": "1.21.x"
+  }
+}
