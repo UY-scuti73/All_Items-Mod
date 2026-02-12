@@ -34,7 +34,7 @@ public final class files {
     }
 
     private static ArrayList<String> getList(boolean mainList) throws IOException {
-        String relativePath = mainList ? "AllItems/items.txt" : "AllItems/Data/items.txt";
+        String relativePath = mainList ? "AllItems/items.txt" : "AllItems/Data/" + worldKeys.worldKey + ".txt";
         Path listPath = CONFIG_DIR.resolve(relativePath);
 
         Path parent = listPath.getParent();
@@ -96,7 +96,7 @@ public final class files {
 
     private static void saveItemList(boolean mainList, List<String> lines) {
         try {
-            String relativePath = mainList ? "AllItems/items.txt" : "AllItems/Data/items.txt";
+            String relativePath = mainList ? "AllItems/items.txt" : "AllItems/Data/" + worldKeys.worldKey + ".txt";
             Path listPath = CONFIG_DIR.resolve(relativePath);
 
             Path parent = listPath.getParent();

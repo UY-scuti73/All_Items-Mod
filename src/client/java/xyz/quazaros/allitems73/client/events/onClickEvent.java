@@ -34,6 +34,5 @@ public class onClickEvent {
         if (client.player == null || client.getNetworkHandler() == null) {return;}
         Allitems73Client.ItemList.updateList();
         client.setScreen(new VirtualChestScreen(filtered));
-        files.saveList();
     }
 }
