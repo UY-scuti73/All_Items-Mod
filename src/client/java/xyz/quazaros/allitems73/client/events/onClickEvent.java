@@ -19,12 +19,13 @@ public class onClickEvent {
                         "key.allitems73.openinventory",
                         InputUtil.Type.KEYSYM,
                         GLFW.GLFW_KEY_G,
-                        KeyBinding.Category.MISC
+                        KeyBinding.MISC_CATEGORY
                 )
         );
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             while (keyBinding.wasPressed()) {
+                System.out.println("TEST");
                 onInventoryKeyPressed(client, false);
             }
         });

@@ -2,7 +2,6 @@ package xyz.quazaros.allitems73.client.inventory;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.RenderPipelines;
-import net.minecraft.client.gui.Click;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.item.ItemStack;
@@ -197,15 +196,15 @@ public class VirtualChestScreen extends Screen {
     }
 
     @Override
-    public boolean mouseClicked(Click click, boolean doubled) {
-        if (click.button() == 0 && canScroll() && isOverScrollbar(click.x(), click.y())) {
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if (button == 0 && canScroll() && isOverScrollbar(mouseX, mouseY)) {
             scrolling = true;
-            updateScrollFromMouse(click.y());
+            updateScrollFromMouse(mouseY);
             return true;
-        } else if (click.button() == 0 && isOverFilter(click.x(), click.y())) {
+        } else if (button == 0 && isOverFilter(mouseX, mouseY)) {
             onInventoryKeyPressed(MinecraftClient.getInstance(), !filtered);
         }
-        return super.mouseClicked(click, doubled);
+        return super.mouseClicked(mouseX, mouseY, button);
     }
 
     /////////////////////
@@ -247,20 +246,20 @@ public class VirtualChestScreen extends Screen {
     }
 
     @Override
-    public boolean mouseDragged(Click click, double deltaX, double deltaY) {
-        if (click.button() == 0 && scrolling && canScroll()) {
-            updateScrollFromMouse(click.y());
+    public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
+        if (button == 0 && scrolling && canScroll()) {
+            updateScrollFromMouse(mouseY);
             return true;
         }
-        return super.mouseDragged(click, deltaX, deltaY);
+        return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
     }
 
     @Override
-    public boolean mouseReleased(Click click) {
-        if (click.button() == 0) {
+    public boolean mouseReleased(double mouseX, double mouseY, int button) {
+        if (button == 0) {
             scrolling = false;
         }
-        return super.mouseReleased(click);
+        return super.mouseReleased(mouseX, mouseY, button);
     }
 
     private void renderScrollbar(DrawContext context) {
