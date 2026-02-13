@@ -4,6 +4,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.text.Text;
@@ -66,6 +67,7 @@ public class VirtualChestScreen extends Screen {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float deltaTicks) {
+        super.render(context, mouseX, mouseY, deltaTicks);
         renderBackgroundTexture(context);
         drawTitle(context);
         renderSlotsAndItems(context);
@@ -73,13 +75,12 @@ public class VirtualChestScreen extends Screen {
         renderScrollbar(context);
         renderProgress(context, mouseX, mouseY);
         renderFilter(context, mouseX, mouseY);
-        super.render(context, mouseX, mouseY, deltaTicks);
     }
 
     private void renderBackgroundTexture(DrawContext context) {
-        context.getMatrices().pushMatrix();
+        context.getMatrices().push();
         context.drawTexture(
-                RenderPipelines.GUI_TEXTURED,
+                RenderLayer::getGuiTextured,
                 TEXTURE,
                 guiLeft, guiTop,
                 0.0f, 0.0f,
@@ -87,7 +88,7 @@ public class VirtualChestScreen extends Screen {
                 TEX_WIDTH, TEX_HEIGHT,
                 0xFFFFFFFF
         );
-        context.getMatrices().popMatrix();
+        context.getMatrices().pop();
     }
 
     private void renderSlotsAndItems(DrawContext context) {
@@ -279,7 +280,7 @@ public class VirtualChestScreen extends Screen {
         int knobY = y + (int) (scrollPosition * trackHeight);
 
         context.drawTexture(
-                RenderPipelines.GUI_TEXTURED,
+                RenderLayer::getGuiTextured,
                 tempTexture,
                 x, knobY,
                 0.0f, 0.0f,
