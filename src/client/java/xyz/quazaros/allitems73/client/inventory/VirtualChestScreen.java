@@ -79,13 +79,11 @@ public class VirtualChestScreen extends Screen {
     private void renderBackgroundTexture(DrawContext context) {
         context.getMatrices().push();
         context.drawTexture(
-                RenderLayer::getGuiTextured,
                 TEXTURE,
                 guiLeft, guiTop,
                 0.0f, 0.0f,
                 BACKGROUND_WIDTH, BACKGROUND_HEIGHT,
-                TEX_WIDTH, TEX_HEIGHT,
-                0xFFFFFFFF
+                TEX_WIDTH, TEX_HEIGHT
         );
         context.getMatrices().pop();
     }
@@ -279,17 +277,14 @@ public class VirtualChestScreen extends Screen {
         int knobY = y + (int) (scrollPosition * trackHeight);
 
         context.drawTexture(
-                RenderLayer::getGuiTextured,
                 tempTexture,
                 x, knobY,
-                0.0f, 0.0f,
                 KNOB_TEX_WIDTH,
                 KNOB_TEX_HEIGHT,
                 KNOB_TEX_WIDTH,
                 KNOB_TEX_HEIGHT,
                 KNOB_TEX_WIDTH,
-                KNOB_TEX_HEIGHT,
-                0xFFFFFFFF
+                KNOB_TEX_HEIGHT
         );
     }
 
