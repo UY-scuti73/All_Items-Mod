@@ -19,6 +19,7 @@ public class itemList {
         itemMap = new HashMap<>();
 
         ArrayList<String> string_list = getItemList(true);
+        ArrayList<String> submit_list = getItemList(false);
 
         for (String s : string_list) {
             item tempItem = new item(s);
@@ -26,6 +27,10 @@ public class itemList {
         }
 
         for (item i : items) {itemMap.put(i.item_name, i);}
+
+        for (String s : submit_list) {
+            itemMap.get(s).submit();
+        }
     }
 
     public int getSize() {
