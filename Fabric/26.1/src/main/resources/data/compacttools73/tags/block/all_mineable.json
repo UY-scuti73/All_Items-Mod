@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    "#minecraft:wool",
+    "#minecraft:mineable/axe",
+    "#minecraft:mineable/pickaxe",
+    "#minecraft:mineable/shovel",
+    "#minecraft:mineable/hoe",
+    "#minecraft:sword_efficient",
+    "minecraft:cobweb"
+  ]
+}
