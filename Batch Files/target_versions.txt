@@ -1,0 +1,7 @@
+Fabric/1.21.1
+Fabric/1.21.3
+Fabric/1.21.4
+Fabric/1.21.5
+Fabric/1.21.8
+Fabric/1.21.10
+Fabric/1.21.11

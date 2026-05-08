@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/All_Items-Mod.iml" filepath="$PROJECT_DIR$/.idea/All_Items-Mod.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Fabric-1.21.1.client.iml" filepath="$PROJECT_DIR$/.idea/modules/Fabric-1.21.1.client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Fabric-1.21.1.main.iml" filepath="$PROJECT_DIR$/.idea/modules/Fabric-1.21.1.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Fabric-1.21.1.test.iml" filepath="$PROJECT_DIR$/.idea/modules/Fabric-1.21.1.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Fabric-1.21.10.client.iml" filepath="$PROJECT_DIR$/.idea/modules/Fabric-1.21.10.client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Fabric-1.21.10.main.iml" filepath="$PROJECT_DIR$/.idea/modules/Fabric-1.21.10.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Fabric-1.21.10.test.iml" filepath="$PROJECT_DIR$/.idea/modules/Fabric-1.21.10.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Fabric-1.21.11.client.iml" filepath="$PROJECT_DIR$/.idea/modules/Fabric-1.21.11.client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Fabric-1.21.11.main.iml" filepath="$PROJECT_DIR$/.idea/modules/Fabric-1.21.11.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Fabric-1.21.11.test.iml" filepath="$PROJECT_DIR$/.idea/modules/Fabric-1.21.11.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Fabric-1.21.3.client.iml" filepath="$PROJECT_DIR$/.idea/modules/Fabric-1.21.3.client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Fabric-1.21.3.main.iml" filepath="$PROJECT_DIR$/.idea/modules/Fabric-1.21.3.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Fabric-1.21.3.test.iml" filepath="$PROJECT_DIR$/.idea/modules/Fabric-1.21.3.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Fabric-1.21.4.client.iml" filepath="$PROJECT_DIR$/.idea/modules/Fabric-1.21.4.client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Fabric-1.21.4.main.iml" filepath="$PROJECT_DIR$/.idea/modules/Fabric-1.21.4.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Fabric-1.21.4.test.iml" filepath="$PROJECT_DIR$/.idea/modules/Fabric-1.21.4.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Fabric-1.21.5.client.iml" filepath="$PROJECT_DIR$/.idea/modules/Fabric-1.21.5.client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Fabric-1.21.5.main.iml" filepath="$PROJECT_DIR$/.idea/modules/Fabric-1.21.5.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Fabric-1.21.5.test.iml" filepath="$PROJECT_DIR$/.idea/modules/Fabric-1.21.5.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Fabric-1.21.8.client.iml" filepath="$PROJECT_DIR$/.idea/modules/Fabric-1.21.8.client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Fabric-1.21.8.main.iml" filepath="$PROJECT_DIR$/.idea/modules/Fabric-1.21.8.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Fabric-1.21.8.test.iml" filepath="$PROJECT_DIR$/.idea/modules/Fabric-1.21.8.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Fabric-26.1.client.iml" filepath="$PROJECT_DIR$/.idea/modules/Fabric-26.1.client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Fabric-26.1.main.iml" filepath="$PROJECT_DIR$/.idea/modules/Fabric-26.1.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Fabric-26.1.test.iml" filepath="$PROJECT_DIR$/.idea/modules/Fabric-26.1.test.iml" />
+    </modules>
+  </component>
+</project>
