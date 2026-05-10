@@ -1,52 +1,71 @@
+import org.gradle.jvm.toolchain.JavaLanguageVersion
+
 plugins {
     id 'net.fabricmc.fabric-loom' version "${loom_version}"
     id 'maven-publish'
 }
 
-version = project.mod_version
-group = project.maven_group
+// --- Load all properties from ../../version.properties ---
+def versionProps = new Properties()
+file("../../version.properties").withInputStream { versionProps.load(it) }
+
+// Bind and trim the values
+def modVersion     = versionProps["mod_version"]?.toString()?.trim()
+def modName        = versionProps["mod_name"]?.toString()?.trim()
+def modId          = versionProps["mod_id"]?.toString()?.trim()
+def modAuthors     = versionProps["mod_authors"]?.toString()?.trim()
+def modGroupId     = versionProps["mod_group_id"]?.toString()?.trim()
+def modDescription = versionProps["mod_description"]?.toString()?.trim()
+// British spelling in properties → normalized in build
+def modLicense     = versionProps["mod_licence"]?.toString()?.trim()
+
+// Optionally expose them as project properties (if you want project.mod_* elsewhere)
+ext.mod_version     = modVersion
+ext.mod_name        = modName
+ext.mod_id          = modId
+ext.mod_authors     = modAuthors
+ext.mod_group_id    = modGroupId
+ext.mod_description = modDescription
+ext.mod_license     = modLicense
+
+// --- Apply to project identity ---
+version = modVersion
+group = modGroupId   // instead of project.maven_group
 
 repositories {
-    // Add repositories to retrieve artifacts from in here.
-    // You should only use this when depending on other mods because
-    // Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
-    // See https://docs.gradle.org/current/userguide/declaring_repositories.html
-    // for more information about repositories.
+    // Add extra mod repos here if needed.
 }
 
 loom {
     splitEnvironmentSourceSets()
-
     mods {
-        "modid" {
+        "${modId}" {     // was "modid"
             sourceSet sourceSets.main
             sourceSet sourceSets.client
         }
     }
-
 }
 
 dependencies {
-    // To change the versions see the gradle.properties file
+    // Minecraft / loader / Fabric API versions still from gradle.properties
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
-
     implementation "net.fabricmc:fabric-loader:${project.loader_version}"
-
-    // Fabric API. This is technically optional, but you probably want it anyway.
     implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
-
 }
 
 processResources {
-    inputs.property "version", project.version
-    inputs.property "loader_version", project.loader_version
-    inputs.property "minecraft_version", project.minecraft_version
+    inputs.property "version",            project.version
+    inputs.property "loader_version",     project.loader_version
+    inputs.property "minecraft_version",  project.minecraft_version
+
+    // Optional: if you want, you can also inject mod metadata here later
+    // inputs.property "mod_id", project.mod_id, etc.
 
     filesMatching("fabric.mod.json") {
         expand(
-                "version": project.version,
-                "loader_version": project.loader_version,
-                "minecraft_version": project.minecraft_version
+                "version"           : project.version,
+                "loader_version"    : project.loader_version,
+                "minecraft_version" : project.minecraft_version
         )
     }
 }
@@ -56,11 +75,10 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 java {
-    // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
-    // if it is present.
-    // If you remove this line, sources will not be generated.
     withSourcesJar()
-
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(25)
+    }
     sourceCompatibility = JavaVersion.VERSION_25
     targetCompatibility = JavaVersion.VERSION_25
 }
@@ -68,25 +86,18 @@ java {
 jar {
     def projectName = project.name
     inputs.property "projectName", projectName
-
     from("LICENSE") {
-        rename { "${it}_$projectName"}
+        rename { "${it}_$projectName" }
     }
 }
 
-// configure the maven publication
 publishing {
     publications {
         create("mavenJava", MavenPublication) {
             from components.java
         }
     }
-
-    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
     repositories {
-        // Add repositories to publish to here.
-        // Notice: This block does NOT have the same function as the block in the top level.
-        // The repositories here will be used for publishing your artifact, not for
-        // retrieving dependencies.
+        // publishing repos here if needed
     }
 }
