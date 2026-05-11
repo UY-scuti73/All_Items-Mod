@@ -54,18 +54,27 @@ dependencies {
 }
 
 processResources {
+    // from gradle.properties
     inputs.property "version",            project.version
     inputs.property "loader_version",     project.loader_version
     inputs.property "minecraft_version",  project.minecraft_version
-
-    // Optional: if you want, you can also inject mod metadata here later
-    // inputs.property "mod_id", project.mod_id, etc.
-
+    // from version.properties (we exported them as project.mod_*)
+    inputs.property "mod_id",             project.mod_id
+    inputs.property "mod_name",           project.mod_name
+    inputs.property "mod_authors",        project.mod_authors
+    inputs.property "mod_description",    project.mod_description
+    inputs.property "mod_license",        project.mod_license
+    filteringCharset "UTF-8"
     filesMatching("fabric.mod.json") {
         expand(
                 "version"           : project.version,
                 "loader_version"    : project.loader_version,
-                "minecraft_version" : project.minecraft_version
+                "minecraft_version" : project.minecraft_version,
+                "mod_id"            : project.mod_id,
+                "mod_name"          : project.mod_name,
+                "mod_authors"       : project.mod_authors,
+                "mod_description"   : project.mod_description,
+                "mod_license"       : project.mod_license,
         )
     }
 }

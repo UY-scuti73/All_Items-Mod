@@ -11,7 +11,7 @@
     <file type="web" url="file://$PROJECT_DIR$/Versions/Fabric/1.21.8" />
     <file type="web" url="file://$PROJECT_DIR$/Versions/Fabric/26.1" />
   </component>
-  <component name="ProjectRootManager">
+  <component name="ProjectRootManager" version="2" project-jdk-name="21" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
 </project>

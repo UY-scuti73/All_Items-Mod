@@ -869,6 +869,7 @@ minecraft:closed_eyeblossom
 minecraft:torchflower
 minecraft:pitcher_plant
 minecraft:wither_rose
+minecraft:golden_dandelion
 minecraft:cactus_flower
 minecraft:azalea
 minecraft:flowering_azalea

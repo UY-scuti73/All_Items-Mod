@@ -1,7 +1,7 @@
 package xyz.quazaros.allitems73.client.items;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.inventory.Inventory;
+import net.minecraft.client.Minecraft;
+import net.minecraft.world.entity.player.Inventory;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -38,10 +38,10 @@ public class itemList {
     }
 
     public void updateList() {
-        Inventory inv = MinecraftClient.getInstance().player.getInventory();
+        Inventory inv = Minecraft.getInstance().player.getInventory();
 
-        for (int i = 0; i < inv.size(); i++) {
-            String name = inv.getStack(i).getItem().toString();
+        for (int i = 0; i < inv.getContainerSize(); i++) {
+            String name = inv.getItem(i).getItem().toString();
             get(name).submit();
         }
     }

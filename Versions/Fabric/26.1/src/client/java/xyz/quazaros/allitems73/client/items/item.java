@@ -1,11 +1,11 @@
 package xyz.quazaros.allitems73.client.items;
 
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup.Type;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.registry.Registries;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.core.registries.BuiltInRegistries;
 
 public class item {
     public String item_name;
@@ -21,18 +21,18 @@ public class item {
         item_type = getType();
         item_stack = new ItemStack(item_type, 1);
 
-        item_stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, false);
+        item_stack.set(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, false);
 
         is_found = false;
     }
 
     public void submit() {
         is_found = true;
-        item_stack.set(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        item_stack.set(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true);
     }
 
     private Item getType() {
-        for (Item i : Registries.ITEM) {
+        for (Item i : BuiltInRegistries.ITEM) {
             if (i.toString().equalsIgnoreCase(item_name)) {
                 return i;
             }

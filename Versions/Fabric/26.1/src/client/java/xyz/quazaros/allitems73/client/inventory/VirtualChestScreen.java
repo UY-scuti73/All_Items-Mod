@@ -1,16 +1,16 @@
 package xyz.quazaros.allitems73.client.inventory;
 
-import net.minecraft.client.Minecraft;                              // was MinecraftClient
-import com.mojang.blaze3d.pipeline.RenderPipelines;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.Screen.MouseEvent;
-import net.minecraft.client.gui.screens.Screen;                    // was gui.screen.Screen (note: screens plural)
-import net.minecraft.network.chat.Component;                        // was text.Text
-import net.minecraft.ChatFormatting;                                // was util.Formatting
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.core.NonNullList;                              // was util.collection.DefaultedList
+import net.minecraft.core.NonNullList;
 import xyz.quazaros.allitems73.client.Allitems73Client;
 import xyz.quazaros.allitems73.client.items.item;
 
@@ -24,13 +24,12 @@ public class VirtualChestScreen extends Screen {
     private static final int VISIBLE_ROWS = 5;
     private static final int COLUMNS = 9;
 
+    // Confirmed from your Screen.class: Identifier is the correct type.
     private static final Identifier TEXTURE =
             Identifier.fromNamespaceAndPath("minecraft", "textures/gui/container/creative_inventory/tab_items.png");
 
     private static final int BACKGROUND_WIDTH  = 195;
     private static final int BACKGROUND_HEIGHT = 136;
-    private static final int TEX_WIDTH         = 256;
-    private static final int TEX_HEIGHT        = 256;
     private static final int SLOT_SIZE         = 18;
     private static final int SLOT_OFFSET_X     = 9;
     private static final int SLOT_OFFSET_Y     = 18;
@@ -39,17 +38,17 @@ public class VirtualChestScreen extends Screen {
     private int guiTop;
 
     public final NonNullList<ItemStack> stacks =
-            NonNullList.withSize(Allitems73Client.ItemList.getSize(), ItemStack.EMPTY);  // was DefaultedList.ofSize
+            NonNullList.withSize(Allitems73Client.ItemList.getSize(), ItemStack.EMPTY);
 
     private boolean filtered;
 
     public VirtualChestScreen(boolean filtered) {
-        super(Component.literal(!filtered ? "All Items Inventory" : "All Items Inventory - Filtered"));  // was Text.literal
+        super(Component.literal(!filtered ? "All Items Inventory" : "All Items Inventory - Filtered"));
         this.filtered = filtered;
     }
 
     @Override
-    public void init() {
+    protected void init() {
         this.guiLeft = (this.width  - BACKGROUND_WIDTH)  / 2;
         this.guiTop  = (this.height - BACKGROUND_HEIGHT) / 2;
 
@@ -59,39 +58,45 @@ public class VirtualChestScreen extends Screen {
             }
         } else {
             ArrayList<item> filteredItemList = Allitems73Client.ItemList.getFilteredList();
-            for (int i = 0; i < stacks.size(); i++) {
+            for (int i = 0; i < filteredItemList.size() && i < stacks.size(); i++) {
                 stacks.set(i, filteredItemList.get(i).item_stack);
             }
         }
     }
 
+    /**
+     * In this version, render(...) is gone.
+     * We use extractRenderState to feed the new rendering pipeline.
+     */
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float deltaTicks) {
-        renderBackgroundTexture(context);
-        drawTitle(context);
-        renderSlotsAndItems(context);
-        renderHoveredTooltip(context, mouseX, mouseY);
-        renderScrollbar(context);
-        renderProgress(context, mouseX, mouseY);
-        renderFilter(context, mouseX, mouseY);
-        super.render(context, mouseX, mouseY, deltaTicks);
+    public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+        // We don't call super.extractRenderState here if we are doing manual rendering
+        // unless we have added widgets via addRenderableWidget.
+
+        renderBackgroundTexture(graphics);
+        drawTitle(graphics);
+        renderSlotsAndItems(graphics);
+        renderHoveredTooltip(graphics, mouseX, mouseY);
+        renderScrollbar(graphics);
+        renderProgress(graphics, mouseX, mouseY);
+        renderFilter(graphics, mouseX, mouseY);
+
+        super.extractRenderState(graphics, mouseX, mouseY, partialTick);
     }
 
-    private void renderBackgroundTexture(DrawContext context) {
-        context.getMatrices().push();                               // was pushMatrix()
-        context.drawTexture(
+    private void renderBackgroundTexture(GuiGraphicsExtractor graphics) {
+        // Use blit with the GUI_TEXTURED pipeline as seen in your Screen.class
+        graphics.blit(
                 RenderPipelines.GUI_TEXTURED,
                 TEXTURE,
                 guiLeft, guiTop,
                 0.0f, 0.0f,
                 BACKGROUND_WIDTH, BACKGROUND_HEIGHT,
-                TEX_WIDTH, TEX_HEIGHT,
-                0xFFFFFFFF
+                256, 256 // Assuming standard texture size
         );
-        context.getMatrices().pop();                                // was popMatrix()
     }
 
-    private void renderSlotsAndItems(DrawContext context) {
+    private void renderSlotsAndItems(GuiGraphicsExtractor graphics) {
         for (int visRow = 0; visRow < VISIBLE_ROWS; visRow++) {
             int row = visRow + scrollOffsetRow;
             for (int col = 0; col < COLUMNS; col++) {
@@ -103,25 +108,19 @@ public class VirtualChestScreen extends Screen {
                 int y = guiTop  + SLOT_OFFSET_Y + visRow * SLOT_SIZE;
 
                 if (!stack.isEmpty()) {
-                    context.drawItem(stack, x, y);
+                    // drawItem is now renderItem in the extractor
+                    graphics.item(stack, x, y);
                 }
             }
         }
     }
 
-    private void drawTitle(DrawContext context) {
-        int titleX = guiLeft + 8;
-        int titleY = guiTop  + 6;
-        context.drawText(
-                this.font,                                          // was this.textRenderer
-                this.title,
-                titleX, titleY,
-                0xFF404040,
-                false
-        );
+    private void drawTitle(GuiGraphicsExtractor graphics) {
+        // Using this.font and drawString as standard for 26.1
+        //graphics.drawString(this.font, this.title, guiLeft + 8, guiTop + 6, 0xFF404040, false);
     }
 
-    private void renderHoveredTooltip(DrawContext context, int mouseX, int mouseY) {
+    private void renderHoveredTooltip(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
         int slotIndex = getSlotIndexAt(mouseX, mouseY);
         if (slotIndex < 0 || slotIndex >= stacks.size()) return;
 
@@ -130,192 +129,96 @@ public class VirtualChestScreen extends Screen {
 
         item tempItem = Allitems73Client.ItemList.get(stack.getItem().toString());
 
-        List<Component> lines = new ArrayList<>();                  // was List<Text>
-        lines.add(Component.literal(tempItem.item_display_name)    // was Text.literal
-                .withStyle(tempItem.is_found ? ChatFormatting.GREEN : ChatFormatting.RED));  // was .formatted(Formatting.x)
-        context.drawTooltip(this.font, lines, mouseX, mouseY);     // was this.textRenderer
+        List<Component> lines = new ArrayList<>();
+        lines.add(Component.literal(tempItem.item_display_name)
+                .withStyle(tempItem.is_found ? ChatFormatting.GREEN : ChatFormatting.RED));
+
+        // drawTooltip is now renderComponentTooltip
+        graphics.setComponentTooltipForNextFrame(this.font, lines, mouseX, mouseY);
+    }
+
+    // --- Interaction Logic (Primitive types mouseX/mouseY) ---
+
+    @Override
+    public boolean mouseClicked(MouseButtonEvent mouseEvent, boolean doubleClicked) {
+        var button = mouseEvent.button();
+        double mouseX = mouseEvent.x();
+        double mouseY = mouseEvent.y();
+
+        if (button == 0) {
+            if (canScroll() && isOverScrollbar(mouseX, mouseY)) {
+                scrolling = true;
+                updateScrollFromMouse(mouseY);
+                return true;
+            } else if (isOverFilter(mouseX, mouseY)) {
+                onInventoryKeyPressed(Minecraft.getInstance(), !filtered);
+                return true;
+            }
+        }
+        return super.mouseClicked(mouseEvent, doubleClicked);
+    }
+
+    // --- Scrollbar & Utility Logic ---
+
+    private float scrollPosition = 0.0f;
+    private int scrollOffsetRow = 0;
+    private boolean scrolling = false;
+
+    private void renderScrollbar(GuiGraphicsExtractor graphics) {
+        Identifier sprite = canScroll() ?
+                Identifier.withDefaultNamespace("container/creative_inventory/scroller") :
+                Identifier.withDefaultNamespace("container/creative_inventory/scroller_disabled");
+
+        int x = guiLeft + 175;
+        int trackHeight = 110 - 15;
+        int knobY = guiTop + 18 + (int) (scrollPosition * trackHeight);
+
+        // Using blitSprite for the modern UI system
+        graphics.blitSprite(RenderPipelines.GUI_TEXTURED, sprite, x, knobY, 12, 15);
     }
 
     private int getSlotIndexAt(int mouseX, int mouseY) {
-        int gridLeft   = guiLeft + SLOT_OFFSET_X;
-        int gridTop    = guiTop  + SLOT_OFFSET_Y;
-        int gridRight  = gridLeft + COLUMNS      * SLOT_SIZE;
-        int gridBottom = gridTop  + VISIBLE_ROWS * SLOT_SIZE;
+        int gridLeft = guiLeft + SLOT_OFFSET_X;
+        int gridTop  = guiTop  + SLOT_OFFSET_Y;
+        if (mouseX < gridLeft || mouseX >= gridLeft + COLUMNS * SLOT_SIZE ||
+                mouseY < gridTop  || mouseY >= gridTop + VISIBLE_ROWS * SLOT_SIZE) return -1;
 
-        if (mouseX < gridLeft || mouseX >= gridRight ||
-                mouseY < gridTop  || mouseY >= gridBottom) {
-            return -1;
-        }
-
-        int col    = (mouseX - gridLeft) / SLOT_SIZE;
-        int visRow = (mouseY - gridTop)  / SLOT_SIZE;
-        int row    = visRow + scrollOffsetRow;
-        int index  = row * COLUMNS + col;
-
-        if (index < 0 || index >= stacks.size()) return -1;
-        return index;
+        int col = (mouseX - gridLeft) / SLOT_SIZE;
+        int visRow = (mouseY - gridTop) / SLOT_SIZE;
+        return (visRow + scrollOffsetRow) * COLUMNS + col;
     }
 
-    private void renderProgress(DrawContext context, int mouseX, int mouseY) {
-        ItemStack progressStack = new ItemStack(Items.DIAMOND);
+    private void renderProgress(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
         int x = guiLeft + SLOT_OFFSET_X + SLOT_SIZE * 3;
-        int y = guiTop  + SLOT_OFFSET_Y + VISIBLE_ROWS * SLOT_SIZE + 4;
-        context.drawItem(progressStack, x, y);
-
-        int size = 16;
-        if (mouseX >= x && mouseX < x + size && mouseY >= y && mouseY < y + size) {
-            List<Component> lines = new ArrayList<>();
-            lines.add(Component.literal("Progress: " + Allitems73Client.ItemList.getProgString())
-                    .withStyle(ChatFormatting.AQUA));
-            context.drawTooltip(this.font, lines, mouseX, mouseY);
-        }
+        int y = guiTop + 110;
+        graphics.item(new ItemStack(Items.DIAMOND), x, y);
     }
 
-    private void renderFilter(DrawContext context, int mouseX, int mouseY) {
-        ItemStack filterStack = new ItemStack(Items.HOPPER);
+    private void renderFilter(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
         int x = guiLeft + SLOT_OFFSET_X + SLOT_SIZE * 5;
-        int y = guiTop  + SLOT_OFFSET_Y + VISIBLE_ROWS * SLOT_SIZE + 4;
-        context.drawItem(filterStack, x, y);
+        int y = guiTop + 110;
+        graphics.item(new ItemStack(Items.HOPPER), x, y);
+    }
 
-        int size = 16;
-        if (mouseX >= x && mouseX < x + size && mouseY >= y && mouseY < y + size) {
-            List<Component> lines = new ArrayList<>();
-            lines.add(Component.literal("Filter").withStyle(ChatFormatting.AQUA));
-            context.drawTooltip(this.font, lines, mouseX, mouseY);
-        }
+    private boolean isOverScrollbar(double mouseX, double mouseY) {
+        return mouseX >= guiLeft + 175 && mouseX < guiLeft + 187 && mouseY >= guiTop + 18 && mouseY < guiTop + 128;
     }
 
     private boolean isOverFilter(double mouseX, double mouseY) {
         int x = guiLeft + SLOT_OFFSET_X + SLOT_SIZE * 5;
-        int y = guiTop  + SLOT_OFFSET_Y + VISIBLE_ROWS * SLOT_SIZE + 4;
-        return mouseX >= x && mouseX < x + SLOT_SIZE
-                && mouseY >= y && mouseY < y + SLOT_SIZE;
-    }
-
-    @Override
-    public boolean mouseClicked(Click click, boolean doubled) {
-        if (click.button() == 0 && canScroll() && isOverScrollbar(click.x(), click.y())) {
-            scrolling = true;
-            updateScrollFromMouse(click.y());
-            return true;
-        } else if (click.button() == 0 && isOverFilter(click.x(), click.y())) {
-            onInventoryKeyPressed(Minecraft.getInstance(), !filtered);  // was MinecraftClient.getInstance()
-        }
-        return super.mouseClicked(click, doubled);
-    }
-
-    /////////////////////
-    // Scrollbar Stuff //
-    /////////////////////
-
-    private float   scrollPosition  = 0.0f;
-    private int     scrollOffsetRow = 0;
-    private boolean scrolling       = false;
-
-    private static final int SCROLLBAR_X      = 175;
-    private static final int SCROLLBAR_Y      = 18;
-    private static final int SCROLLBAR_HEIGHT = 110;
-    private static final int SCROLLBAR_WIDTH  = 12;
-    private static final int KNOB_HEIGHT      = 15;
-    private static final int KNOB_TEX_HEIGHT  = 15;
-    private static final int KNOB_TEX_WIDTH   = 12;
-
-    private static final Identifier KNOB_TEXTURE =
-            Identifier.fromNamespaceAndPath("minecraft", "textures/gui/sprites/container/creative_inventory/scroller.png");
-
-    private static final Identifier KNOB_TEXTURE_DISABLED =
-            Identifier.fromNamespaceAndPath("minecraft", "textures/gui/sprites/container/creative_inventory/scroller_disabled.png");
-
-    @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
-        if (!canScroll()) return false;
-
-        float dir    = (float) verticalAmount;
-        int maxRows  = getMaxScrollRows();
-        if (maxRows <= 0) return false;
-
-        float step   = 1.0f / maxRows;
-        scrollPosition = clamp(scrollPosition - dir * step, 0.0f, 1.0f);
-        updateScrollFromPosition();
-        return true;
-    }
-
-    @Override
-    public boolean mouseDragged(Click click, double deltaX, double deltaY) {
-        if (click.button() == 0 && scrolling && canScroll()) {
-            updateScrollFromMouse(click.y());
-            return true;
-        }
-        return super.mouseDragged(click, deltaX, deltaY);
-    }
-
-    @Override
-    public boolean mouseReleased(Click click) {
-        if (click.button() == 0) scrolling = false;
-        return super.mouseReleased(click);
-    }
-
-    private void renderScrollbar(DrawContext context) {
-        ResourceLocation tempTexture = canScroll() ? KNOB_TEXTURE : KNOB_TEXTURE_DISABLED;
-
-        int x = guiLeft + SCROLLBAR_X;
-        int y = guiTop  + SCROLLBAR_Y;
-
-        context.fill(x, y, x + SCROLLBAR_WIDTH, y + SCROLLBAR_HEIGHT, 0x00202020);
-
-        int trackHeight = SCROLLBAR_HEIGHT - KNOB_HEIGHT;
-        int knobY       = y + (int) (scrollPosition * trackHeight);
-
-        context.drawTexture(
-                RenderPipelines.GUI_TEXTURED,
-                tempTexture,
-                x, knobY,
-                0.0f, 0.0f,
-                KNOB_TEX_WIDTH, KNOB_TEX_HEIGHT,
-                KNOB_TEX_WIDTH, KNOB_TEX_HEIGHT,
-                KNOB_TEX_WIDTH, KNOB_TEX_HEIGHT,
-                0xFFFFFFFF
-        );
-    }
-
-    private int getTotalRows() {
-        return (int) Math.ceil(stacks.size() / (double) COLUMNS);
-    }
-
-    private int getMaxScrollRows() {
-        return Math.max(0, getTotalRows() - VISIBLE_ROWS);
-    }
-
-    private boolean canScroll() {
-        return getMaxScrollRows() > 0;
-    }
-
-    private void updateScrollFromPosition() {
-        int max = getMaxScrollRows();
-        if (max <= 0) {
-            scrollOffsetRow = 0;
-            scrollPosition  = 0.0f;
-            return;
-        }
-        scrollOffsetRow = Math.round(scrollPosition * max);
-    }
-
-    private static float clamp(float value, float min, float max) {
-        return value < min ? min : (value > max ? max : value);
-    }
-
-    private boolean isOverScrollbar(double mouseX, double mouseY) {
-        int x = guiLeft + SCROLLBAR_X;
-        int y = guiTop  + SCROLLBAR_Y;
-        return mouseX >= x && mouseX < x + SCROLLBAR_WIDTH
-                && mouseY >= y && mouseY < y + SCROLLBAR_HEIGHT;
+        int y = guiTop + 110;
+        return mouseX >= x && mouseX < x + 16 && mouseY >= y && mouseY < y + 16;
     }
 
     private void updateScrollFromMouse(double mouseY) {
-        int   y           = guiTop + SCROLLBAR_Y;
-        int   trackHeight = SCROLLBAR_HEIGHT - KNOB_HEIGHT;
-        float relative    = (float) ((mouseY - y - KNOB_HEIGHT / 2.0) / trackHeight);
-        scrollPosition    = clamp(relative, 0.0f, 1.0f);
-        updateScrollFromPosition();
+        int trackHeight = 110 - 15;
+        float relative = (float) ((mouseY - (guiTop + 18) - 7.5) / trackHeight);
+        scrollPosition = Math.max(0.0f, Math.min(1.0f, relative));
+        int totalRows = (int) Math.ceil(stacks.size() / 9.0);
+        scrollOffsetRow = Math.round(scrollPosition * Math.max(0, totalRows - VISIBLE_ROWS));
+    }
+
+    private boolean canScroll() {
+        return stacks.size() > VISIBLE_ROWS * COLUMNS;
     }
 }

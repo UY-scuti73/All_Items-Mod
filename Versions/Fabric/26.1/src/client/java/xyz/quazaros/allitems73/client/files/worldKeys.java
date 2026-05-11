@@ -1,39 +1,38 @@
 package xyz.quazaros.allitems73.client.files;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ServerInfo;
-import net.minecraft.server.integrated.IntegratedServer;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ServerData;
+import net.minecraft.client.server.IntegratedServer;
 
 public class worldKeys {
     public static String worldKey;
 
-    private static MinecraftClient client = MinecraftClient.getInstance();
-    private static IntegratedServer server = client.getServer();
-    private static boolean isSingleplayer = client.isInSingleplayer() && server != null;
-
     public static void setWorldKey() {
-        if (isSingleplayer) {worldKey = getSingleplayerWorldId();}
-        else {worldKey = getMultiplayerWorldId();}
+        Minecraft client = Minecraft.getInstance();
+
+        // We check current status dynamically rather than using static initializers
+        if (client.isLocalServer()) {
+            worldKey = getSingleplayerWorldId(client);
+        } else {
+            worldKey = getMultiplayerWorldId(client);
+        }
     }
 
-    private static String getSingleplayerWorldId() {
-        if (!client.isInSingleplayer() || client.getServer() == null) {
-            return null;
-        }
+    private static String getSingleplayerWorldId(Minecraft client) {
+        IntegratedServer server = client.getSingleplayerServer();
+        if (server == null) return "sp_unknown";
 
-        String levelName = client.getServer().getSaveProperties().getLevelName();
+        String levelName = server.getWorldData().getLevelName();
         return "sp_" + sanitize(levelName);
     }
 
-    private static String getMultiplayerWorldId() {
-        MinecraftClient client = MinecraftClient.getInstance();
-        if (client.isInSingleplayer()) return null;
-        ServerInfo info = client.getCurrentServerEntry();
+    private static String getMultiplayerWorldId(Minecraft client) {
+        ServerData info = client.getCurrentServer();
         if (info == null) {
-            return null;
+            return "mp_unknown";
         }
 
-        String addr = info.address;
+        String addr = info.ip;
         return "mp_" + sanitize(addr);
     }
 
