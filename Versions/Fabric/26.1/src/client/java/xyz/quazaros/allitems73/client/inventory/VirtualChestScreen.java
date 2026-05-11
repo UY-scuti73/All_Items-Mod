@@ -1,5 +1,6 @@
 package xyz.quazaros.allitems73.client.inventory;
 
+import com.mojang.realmsclient.util.TextRenderingUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
@@ -11,6 +12,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.core.NonNullList;
+
 import xyz.quazaros.allitems73.client.Allitems73Client;
 import xyz.quazaros.allitems73.client.items.item;
 
@@ -108,7 +110,6 @@ public class VirtualChestScreen extends Screen {
                 int y = guiTop  + SLOT_OFFSET_Y + visRow * SLOT_SIZE;
 
                 if (!stack.isEmpty()) {
-                    // drawItem is now renderItem in the extractor
                     graphics.item(stack, x, y);
                 }
             }
@@ -116,8 +117,7 @@ public class VirtualChestScreen extends Screen {
     }
 
     private void drawTitle(GuiGraphicsExtractor graphics) {
-        // Using this.font and drawString as standard for 26.1
-        //graphics.drawString(this.font, this.title, guiLeft + 8, guiTop + 6, 0xFF404040, false);
+        graphics.text(this.font, this.title, guiLeft + 8, guiTop + 6, 0xFF404040, false);
     }
 
     private void renderHoveredTooltip(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
@@ -133,11 +133,42 @@ public class VirtualChestScreen extends Screen {
         lines.add(Component.literal(tempItem.item_display_name)
                 .withStyle(tempItem.is_found ? ChatFormatting.GREEN : ChatFormatting.RED));
 
-        // drawTooltip is now renderComponentTooltip
         graphics.setComponentTooltipForNextFrame(this.font, lines, mouseX, mouseY);
     }
 
-    // --- Interaction Logic (Primitive types mouseX/mouseY) ---
+    private void renderProgress(GuiGraphicsExtractor context, int mouseX, int mouseY) {
+        ItemStack progressStack = new ItemStack(Items.DIAMOND);
+
+        int x = guiLeft + SLOT_OFFSET_X + SLOT_SIZE * 3;
+        int y = guiTop  + SLOT_OFFSET_Y + VISIBLE_ROWS * SLOT_SIZE + 4;
+
+        context.item(progressStack, x, y);
+
+        int size = 16;
+        if (mouseX >= x && mouseX < x + size && mouseY >= y && mouseY < y + size) {
+            List<Component> lines = new ArrayList<>();
+            lines.add(Component.literal("Progress: " + Allitems73Client.ItemList.getProgString()).withStyle(ChatFormatting.AQUA));
+            context.setComponentTooltipForNextFrame(this.font, lines, mouseX, mouseY);
+        }
+    }
+
+    private void renderFilter(GuiGraphicsExtractor context, int mouseX, int mouseY) {
+        ItemStack progressStack = new ItemStack(Items.HOPPER);
+
+        int x = guiLeft + SLOT_OFFSET_X + SLOT_SIZE * 5;
+        int y = guiTop  + SLOT_OFFSET_Y + VISIBLE_ROWS * SLOT_SIZE + 4;
+
+        context.item(progressStack, x, y);
+
+        int size = 16;
+        if (mouseX >= x && mouseX < x + size && mouseY >= y && mouseY < y + size) {
+            List<Component> lines = new ArrayList<>();
+            lines.add(Component.literal("Filter").withStyle(ChatFormatting.AQUA));
+            context.setComponentTooltipForNextFrame(this.font, lines, mouseX, mouseY);
+        }
+    }
+
+    // --- Interaction Logic ---
 
     @Override
     public boolean mouseClicked(MouseButtonEvent mouseEvent, boolean doubleClicked) {
@@ -158,6 +189,37 @@ public class VirtualChestScreen extends Screen {
         return super.mouseClicked(mouseEvent, doubleClicked);
     }
 
+    @Override
+    public boolean mouseDragged(MouseButtonEvent mouseEvent, double dragX, double dragY) {
+        if (scrolling) {
+            updateScrollFromMouse(mouseEvent.y());
+            return true;
+        }
+        return super.mouseDragged(mouseEvent, dragX, dragY);
+    }
+
+    @Override
+    public boolean mouseReleased(MouseButtonEvent mouseEvent) {
+        if (mouseEvent.button() == 0 && scrolling) {
+            scrolling = false;
+            return true;
+        }
+        return super.mouseReleased(mouseEvent);
+    }
+
+    @Override
+    public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
+        if (!canScroll()) return false;
+
+        int totalRows = (int) Math.ceil(stacks.size() / 9.0);
+        int maxRows = Math.max(0, totalRows - VISIBLE_ROWS);
+
+        scrollOffsetRow = Math.max(0, Math.min(maxRows, scrollOffsetRow - (int) Math.signum(scrollY)));
+        scrollPosition = maxRows > 0 ? (float) scrollOffsetRow / maxRows : 0.0f;
+
+        return true;
+    }
+
     // --- Scrollbar & Utility Logic ---
 
     private float scrollPosition = 0.0f;
@@ -173,7 +235,6 @@ public class VirtualChestScreen extends Screen {
         int trackHeight = 110 - 15;
         int knobY = guiTop + 18 + (int) (scrollPosition * trackHeight);
 
-        // Using blitSprite for the modern UI system
         graphics.blitSprite(RenderPipelines.GUI_TEXTURED, sprite, x, knobY, 12, 15);
     }
 
@@ -186,18 +247,6 @@ public class VirtualChestScreen extends Screen {
         int col = (mouseX - gridLeft) / SLOT_SIZE;
         int visRow = (mouseY - gridTop) / SLOT_SIZE;
         return (visRow + scrollOffsetRow) * COLUMNS + col;
-    }
-
-    private void renderProgress(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
-        int x = guiLeft + SLOT_OFFSET_X + SLOT_SIZE * 3;
-        int y = guiTop + 110;
-        graphics.item(new ItemStack(Items.DIAMOND), x, y);
-    }
-
-    private void renderFilter(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
-        int x = guiLeft + SLOT_OFFSET_X + SLOT_SIZE * 5;
-        int y = guiTop + 110;
-        graphics.item(new ItemStack(Items.HOPPER), x, y);
     }
 
     private boolean isOverScrollbar(double mouseX, double mouseY) {
