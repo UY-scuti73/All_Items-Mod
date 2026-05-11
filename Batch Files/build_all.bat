@@ -13,14 +13,14 @@ REM === clear Output Builds before copying anything ===
 echo [INFO] Clearing existing files in "%OUTPUT_DIR%"
 del /q "%OUTPUT_DIR%\*" >nul 2>&1
 
+call "%SCRIPT_DIR%remove_builds.bat"
+
 if not exist "%VERSIONS_FILE%" (
     echo [ERROR] target_versions.txt not found.
-    pause
     exit /b 1
 )
 if not exist "%VERSION_TXT%" (
     echo [ERROR] version.txt not found next to the script.
-    pause
     exit /b 1
 )
 
@@ -42,7 +42,7 @@ echo  Succeeded : %SUCCESS%
 echo  Failed    : %FAILED%
 echo ============================================
 echo.
-pause
+
 exit /b 0
 
 :: -----------------------------------------------
