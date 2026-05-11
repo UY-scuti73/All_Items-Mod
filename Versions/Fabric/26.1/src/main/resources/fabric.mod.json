@@ -1,20 +1,16 @@
 {
   "schemaVersion": 1,
-  "id": "allitems73",
+  "id": "${mod_id}",
   "version": "${version}",
-  "name": "All Items Mod",
-  "description": "",
-  "authors": [],
+  "name": "${mod_name}",
+  "description": "${mod_description}",
+  "authors": [ "${mod_authors}" ],
   "contact": {},
-  "license": "All-Rights-Reserved",
-  "icon": "assets/allitems73/icon.png",
-  "environment": "client",
+  "license": "${mod_license}",
+  "icon": "pack.png",
   "entrypoints": {
     "fabric-datagen": [
       "xyz.quazaros.allitems73.client.Allitems73DataGenerator"
-    ],
-    "client": [
-      "xyz.quazaros.allitems73.client.Allitems73Client"
     ],
     "main": [
       "xyz.quazaros.allitems73.main"
@@ -30,6 +26,6 @@
   "depends": {
     "fabricloader": ">=${loader_version}",
     "fabric-api": "*",
-    "minecraft": "1.21.x"
+    "minecraft": "${minecraft_version}"
   }
 }

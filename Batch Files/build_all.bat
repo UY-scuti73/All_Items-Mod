@@ -3,19 +3,21 @@ setlocal enabledelayedexpansion
 
 set "SCRIPT_DIR=%~dp0"
 for %%R in ("%SCRIPT_DIR%..") do set "ROOT_DIR=%%~fR\"
-
 set "VERSIONS_FILE=%SCRIPT_DIR%target_versions.txt"
 set "VERSION_TXT=%SCRIPT_DIR%version.txt"
 set "OUTPUT_DIR=%ROOT_DIR%Output Builds"
 
 if not exist "%OUTPUT_DIR%" mkdir "%OUTPUT_DIR%"
 
+REM === clear Output Builds before copying anything ===
+echo [INFO] Clearing existing files in "%OUTPUT_DIR%"
+del /q "%OUTPUT_DIR%\*" >nul 2>&1
+
 if not exist "%VERSIONS_FILE%" (
     echo [ERROR] target_versions.txt not found.
     pause
     exit /b 1
 )
-
 if not exist "%VERSION_TXT%" (
     echo [ERROR] version.txt not found next to the script.
     pause
@@ -24,7 +26,6 @@ if not exist "%VERSION_TXT%" (
 
 set /a SUCCESS=0
 set /a FAILED=0
-
 echo ============================================
 echo  Starting Gradle Builds
 echo ============================================
@@ -44,11 +45,9 @@ echo.
 pause
 exit /b 0
 
-
 :: -----------------------------------------------
 :ProcessLine
 set "REL_PATH=%~1"
-
 :: Skip empty lines and comments
 if "%REL_PATH%"=="" exit /b 0
 if "%REL_PATH:~0,1%"=="#" exit /b 0
@@ -96,7 +95,6 @@ if %BUILD_RESULT% neq 0 (
 :: Read version.txt (script folder)
 set "MOD_NAME="
 set "MOD_VERSION="
-
 set /a LINE_NUM=0
 for /f "usebackq delims=" %%L in ("%VERSION_TXT%") do (
     if !LINE_NUM! EQU 0 set "MOD_NAME=%%L"
@@ -111,7 +109,6 @@ for /f "tokens=1,2 delims=\" %%X in ("%REL_PATH%") do (
 )
 
 set "RENAME_PREFIX=!MOD_NAME!-!LOADER!-!MC_VERSION!-!MOD_VERSION!"
-
 set "LIBS_DIR=%PROJECT_DIR%\build\libs"
 set /a COPIED=0
 
@@ -129,12 +126,10 @@ if !COPIED! EQU 0 (
 echo.
 exit /b 0
 
-
 :: -----------------------------------------------
 :CopyJar
 set "JAR_PATH=%~1"
 set "JAR_NAME=%~2"
-
 set "LOWER_NAME=!JAR_NAME!"
 
 :: quick substring checks (no findstr needed)
@@ -142,8 +137,6 @@ if not "!LOWER_NAME:-sources=!"=="!LOWER_NAME!" exit /b 0
 if not "!LOWER_NAME:-dev=!"=="!LOWER_NAME!" exit /b 0
 
 set "NEW_NAME=!RENAME_PREFIX!.jar"
-
 copy /y "%JAR_PATH%" "%OUTPUT_DIR%\!NEW_NAME!" >nul
-
 set /a COPIED+=1
 exit /b 0
