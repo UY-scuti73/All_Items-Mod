@@ -13,10 +13,55 @@
         <option name="resolveExternalAnnotations" value="true" />
       </GradleProjectSettings>
       <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/Versions/Fabric/1.21.10" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/Versions/Fabric/1.21.10" />
+          </set>
+        </option>
+        <option name="resolveExternalAnnotations" value="true" />
+      </GradleProjectSettings>
+      <GradleProjectSettings>
         <option name="externalProjectPath" value="$PROJECT_DIR$/Versions/Fabric/1.21.11" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$/Versions/Fabric/1.21.11" />
+          </set>
+        </option>
+        <option name="resolveExternalAnnotations" value="true" />
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/Versions/Fabric/1.21.3" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/Versions/Fabric/1.21.3" />
+          </set>
+        </option>
+        <option name="resolveExternalAnnotations" value="true" />
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/Versions/Fabric/1.21.4" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/Versions/Fabric/1.21.4" />
+          </set>
+        </option>
+        <option name="resolveExternalAnnotations" value="true" />
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/Versions/Fabric/1.21.5" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/Versions/Fabric/1.21.5" />
+          </set>
+        </option>
+        <option name="resolveExternalAnnotations" value="true" />
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/Versions/Fabric/1.21.8" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/Versions/Fabric/1.21.8" />
           </set>
         </option>
         <option name="resolveExternalAnnotations" value="true" />

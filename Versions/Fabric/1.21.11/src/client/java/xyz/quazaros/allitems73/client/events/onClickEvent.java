@@ -16,7 +16,7 @@ public class onClickEvent {
 
         keyBinding = KeyBindingHelper.registerKeyBinding(
                 new KeyBinding(
-                        "key.allitems73.openinventory",
+                        "key.allitemsclient73.openinventory",
                         InputUtil.Type.KEYSYM,
                         GLFW.GLFW_KEY_G,
                         KeyBinding.Category.MISC

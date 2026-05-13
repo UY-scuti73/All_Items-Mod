@@ -14,10 +14,9 @@ public class onClickEvent {
     private static KeyMapping keyBinding; // Store as a static field for the listener
 
     public static void registerKeyPressed() {
-        System.out.println("TEST");
         keyBinding = KeyMappingHelper.registerKeyMapping(
                 new KeyMapping(
-                        "key.allitems73.openinventory",
+                        "key.allitemsclient73.openinventory",
                         InputConstants.Type.KEYSYM,
                         GLFW.GLFW_KEY_G,
                         KeyMapping.Category.MISC
