@@ -25,7 +25,6 @@ public class onClickEvent {
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             while (keyBinding.wasPressed()) {
-                System.out.println("TEST");
                 onInventoryKeyPressed(client, false);
             }
         });

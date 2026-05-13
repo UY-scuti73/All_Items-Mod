@@ -1,6 +1,7 @@
 package xyz.quazaros.allitems73.client.inventory;
 
 import com.mojang.realmsclient.util.TextRenderingUtils;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
@@ -45,7 +46,13 @@ public class VirtualChestScreen extends Screen {
     private boolean filtered;
 
     public VirtualChestScreen(boolean filtered) {
-        super(Component.literal(!filtered ? "All Items Inventory" : "All Items Inventory - Filtered"));
+        super(
+                Component.literal(
+                        !filtered ?
+                                "All Items Inventory" + (FabricLoader.getInstance().isModLoaded("allitems73") ? " (C)" : "") :
+                                "All Items Inventory - Filtered" + (FabricLoader.getInstance().isModLoaded("allitems73") ? " (C)" : "")
+                )
+        );
         this.filtered = filtered;
     }
 

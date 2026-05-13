@@ -20,7 +20,7 @@ import java.util.stream.Stream;
 public final class files {
 
     private static final Path CONFIG_DIR = FabricLoader.getInstance().getConfigDir();
-    private static final String MODID = "allitems73";
+    private static final String MODID = "allitemsclient73";
 
     private files() {}
 
@@ -34,7 +34,7 @@ public final class files {
     }
 
     private static ArrayList<String> getList(boolean mainList) throws IOException {
-        String relativePath = mainList ? "AllItems/items.txt" : "AllItems/Data/" + worldKeys.worldKey + ".txt";
+        String relativePath = mainList ? "AllItemsClient/items.txt" : "AllItemsClient/Data/" + worldKeys.worldKey + ".txt";
         Path listPath = CONFIG_DIR.resolve(relativePath);
 
         Path parent = listPath.getParent();
@@ -96,7 +96,7 @@ public final class files {
 
     private static void saveItemList(boolean mainList, List<String> lines) {
         try {
-            String relativePath = mainList ? "AllItems/items.txt" : "AllItems/Data/" + worldKeys.worldKey + ".txt";
+            String relativePath = mainList ? "AllItemsClient/items.txt" : "AllItemsClient/Data/" + worldKeys.worldKey + ".txt";
             Path listPath = CONFIG_DIR.resolve(relativePath);
 
             Path parent = listPath.getParent();
