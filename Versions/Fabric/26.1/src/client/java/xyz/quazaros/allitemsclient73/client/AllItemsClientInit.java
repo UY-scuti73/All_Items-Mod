@@ -1,0 +1,20 @@
+package xyz.quazaros.allitemsclient73.client;
+
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
+import xyz.quazaros.allitemsclient73.client.files.files;
+import xyz.quazaros.allitemsclient73.client.items.itemList;
+
+import static xyz.quazaros.allitemsclient73.client.files.worldKeys.setWorldKey;
+
+public class AllItemsClientInit {
+    public static void init() {
+        ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
+            setWorldKey();
+            Allitems73Client.ItemList = new itemList();
+        });
+
+        ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
+            files.saveList();
+        });
+    }
+}

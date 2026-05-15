@@ -1,2 +1,2 @@
-AllItems
-2.0.0
+AllItemsClient
+2.0.1

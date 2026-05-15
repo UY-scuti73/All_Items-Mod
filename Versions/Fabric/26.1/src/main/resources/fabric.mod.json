@@ -8,21 +8,22 @@
   "contact": {},
   "license": "${mod_license}",
   "icon": "pack.png",
+  "environment": "client",
   "entrypoints": {
     "fabric-datagen": [
-      "xyz.quazaros.allitems73.client.Allitems73DataGenerator"
+      "xyz.quazaros.allitemsclient73.client.Allitems73DataGenerator"
     ],
     "main": [
-      "xyz.quazaros.allitems73.main"
+      "xyz.quazaros.allitemsclient73.main"
     ],
     "client": [
-      "xyz.quazaros.allitems73.client.Allitems73Client"
+      "xyz.quazaros.allitemsclient73.client.Allitems73Client"
     ]
   },
   "mixins": [
-    "allitems73.mixins.json",
+    "allitemsclient73.mixins.json",
     {
-      "config": "allitems73.client.mixins.json",
+      "config": "allitemsclient73.client.mixins.json",
       "environment": "client"
     }
   ],
