@@ -1,16 +1,18 @@
-# All Items Fabric Mod
+# All Items Client Mod
 
 This mod allows you to keep track of the items you have collected in your minecraft worlds. It is a spin off of my all items plugin which has a lot more features and better implementation.
 
-This mod is meant to be for client side use only to keep track of your individual progress of collecting all the items in the game. As compared to the more competitive nature of the spigot plugin which is meant for a server wide campaign to collect all items.
+This mod is meant to be for client side use only to keep track of your individual progress of collecting all the items in the game. As compared to the more competitive nature of the spigot plugin which is meant for a server wide campaign to collect all items. There is also the server side fabric/neoforge mod that expands this mod to a multiplayer server.
+
+Link to server mod: (tbd)
 
 Link to spigot plugin: https://modrinth.com/plugin/all-items
 
 # Config
 
-The list of items for you to collect is customizable and compatible with other mods. The default list is just items obtainable in vanilla minecraft but you can add or remove items to get exactly what you want.
+The list of items for you to collect is customizable and compatible with other mods. The default list is just items obtainable in vanilla minecraft but you can add or remove items to get exactly what you want. You can do this per world or change the default list to have a standard item list when loading a new world.
 
-You can find it under configs/AllItems
+You can find it under configs/AllItemsClient
 
 # Keybinds
 
