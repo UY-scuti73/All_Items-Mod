@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static xyz.quazaros.allitemsclient73.client.files.files.getItemList;
+import static xyz.quazaros.allitemsclient73.client.files.files.getProgress;
 
 public class itemList {
     public ArrayList<item> items;
@@ -17,8 +18,8 @@ public class itemList {
         items = new ArrayList<>();
         itemMap = new HashMap<>();
 
-        ArrayList<String> string_list = getItemList(true);
-        ArrayList<String> submit_list = getItemList(false);
+        ArrayList<String> string_list = getItemList();
+        ArrayList<String> submit_list = getProgress();
 
         for (String s : string_list) {
             item tempItem = new item(s);
@@ -28,7 +29,10 @@ public class itemList {
         for (item i : items) {itemMap.put(i.item_name, i);}
 
         for (String s : submit_list) {
-            itemMap.get(s).submit();
+            item tempItem = get(s);
+            if (tempItem != null) {
+                tempItem.submit();
+            }
         }
     }
 
@@ -40,8 +44,10 @@ public class itemList {
         Inventory inv = MinecraftClient.getInstance().player.getInventory();
 
         for (int i = 0; i < inv.size(); i++) {
-            String name = inv.getStack(i).getItem().toString();
-            get(name).submit();
+            item tempItem = get(inv.getStack(i).getItem().toString());
+            if (tempItem != null) {
+                tempItem.submit();
+            }
         }
     }
 

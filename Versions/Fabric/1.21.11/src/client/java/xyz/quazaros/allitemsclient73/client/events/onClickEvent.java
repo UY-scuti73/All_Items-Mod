@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
+import net.minecraft.util.Identifier;
 import org.lwjgl.glfw.GLFW;
 import xyz.quazaros.allitemsclient73.client.Allitems73Client;
 import xyz.quazaros.allitemsclient73.client.inventory.VirtualChestScreen;
@@ -18,7 +19,7 @@ public class onClickEvent {
                         "key.allitemsclient73.openinventory",
                         InputUtil.Type.KEYSYM,
                         GLFW.GLFW_KEY_G,
-                        KeyBinding.Category.MISC
+                        KeyBinding.Category.INVENTORY
                 )
         );
 

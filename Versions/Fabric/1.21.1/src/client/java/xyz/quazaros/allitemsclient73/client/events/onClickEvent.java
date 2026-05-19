@@ -18,7 +18,7 @@ public class onClickEvent {
                         "key.allitemsclient73.openinventory",
                         InputUtil.Type.KEYSYM,
                         GLFW.GLFW_KEY_G,
-                        KeyBinding.MISC_CATEGORY
+                        "key.categories.allitems73"
                 )
         );
 

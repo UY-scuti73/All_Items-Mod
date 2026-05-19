@@ -72,15 +72,8 @@ public class VirtualChestScreen extends Screen {
         }
     }
 
-    /**
-     * In this version, render(...) is gone.
-     * We use extractRenderState to feed the new rendering pipeline.
-     */
     @Override
     public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
-        // We don't call super.extractRenderState here if we are doing manual rendering
-        // unless we have added widgets via addRenderableWidget.
-
         renderBackgroundTexture(graphics);
         drawTitle(graphics);
         renderSlotsAndItems(graphics);

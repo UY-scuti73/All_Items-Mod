@@ -90,8 +90,7 @@ public class VirtualChestScreen extends Screen {
                 guiLeft, guiTop,
                 0.0f, 0.0f,
                 BACKGROUND_WIDTH, BACKGROUND_HEIGHT,
-                TEX_WIDTH, TEX_HEIGHT,
-                0xFFFFFFFF
+                TEX_WIDTH, TEX_HEIGHT
         );
         context.getMatrices().pop();
     }
@@ -288,14 +287,12 @@ public class VirtualChestScreen extends Screen {
                 RenderLayer::getGuiTextured,
                 tempTexture,
                 x, knobY,
-                0.0f, 0.0f,
                 KNOB_TEX_WIDTH,
                 KNOB_TEX_HEIGHT,
                 KNOB_TEX_WIDTH,
                 KNOB_TEX_HEIGHT,
                 KNOB_TEX_WIDTH,
-                KNOB_TEX_HEIGHT,
-                0xFFFFFFFF
+                KNOB_TEX_HEIGHT
         );
     }
 

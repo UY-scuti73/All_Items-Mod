@@ -10,7 +10,6 @@ public class Allitems73Client implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        System.out.println("TEST1");
         AllItemsClientInit.init();
         registerKeyPressed();
     }

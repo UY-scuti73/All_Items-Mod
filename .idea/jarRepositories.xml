@@ -191,5 +191,20 @@
       <option name="name" value="LoomLocalMinecraft" />
       <option name="url" value="file:/$PROJECT_DIR$/../../../Minecraft%20Mods/Mods/All_Items_Client-Mod/Versions/Fabric/1.21.10/.gradle/loom-cache/minecraftMaven/" />
     </remote-repository>
+    <remote-repository>
+      <option name="id" value="Mojang Meta" />
+      <option name="name" value="Mojang Meta" />
+      <option name="url" value="https://maven.neoforged.net/mojang-meta/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="NeoForged Releases" />
+      <option name="name" value="NeoForged Releases" />
+      <option name="url" value="https://maven.neoforged.net/releases/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="MavenLocal" />
+      <option name="name" value="MavenLocal" />
+      <option name="url" value="file:/$MAVEN_REPOSITORY$/" />
+    </remote-repository>
   </component>
 </project>

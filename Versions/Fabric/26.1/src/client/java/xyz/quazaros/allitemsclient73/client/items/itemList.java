@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static xyz.quazaros.allitemsclient73.client.files.files.getItemList;
+import static xyz.quazaros.allitemsclient73.client.files.files.getProgress;
 
 public class itemList {
     public ArrayList<item> items;
@@ -17,8 +18,8 @@ public class itemList {
         items = new ArrayList<>();
         itemMap = new HashMap<>();
 
-        ArrayList<String> string_list = getItemList(true);
-        ArrayList<String> submit_list = getItemList(false);
+        ArrayList<String> string_list = getItemList();
+        ArrayList<String> submit_list = getProgress();
 
         for (String s : string_list) {
             item tempItem = new item(s);
