@@ -4,7 +4,7 @@ This mod allows you to keep track of the items you have collected in your minecr
 
 This mod is meant to be for client side use only to keep track of your individual progress of collecting all the items in the game. As compared to the more competitive nature of the spigot plugin which is meant for a server wide campaign to collect all items. There is also the server side fabric/neoforge mod that expands this mod to a multiplayer server.
 
-Link to server mod: (tbd)
+Link to server mod: https://modrinth.com/mod/all-items-(server-mod)
 
 Link to spigot plugin: https://modrinth.com/plugin/all-items
 
