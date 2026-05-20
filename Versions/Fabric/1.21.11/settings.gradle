@@ -8,4 +8,6 @@ pluginManagement {
     }
 }
 
-rootProject.name = "Fabric-1.21.11"
+Properties props = new Properties()
+file("gradle.properties").withInputStream { props.load(it) }
+rootProject.name = props.getProperty("gradle_project_name")

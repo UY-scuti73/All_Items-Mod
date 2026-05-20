@@ -1,0 +1,112 @@
+import org.gradle.jvm.toolchain.JavaLanguageVersion
+
+plugins {
+    id 'net.fabricmc.fabric-loom' version "${loom_version}"
+    id 'maven-publish'
+}
+
+// --- Load all properties from ../../version.properties ---
+def versionProps = new Properties()
+file("../../version.properties").withInputStream { versionProps.load(it) }
+
+// Bind and trim the values
+def modVersion     = versionProps["mod_version"]?.toString()?.trim()
+def modName        = versionProps["mod_name"]?.toString()?.trim()
+def modId          = versionProps["mod_id"]?.toString()?.trim()
+def modAuthors     = versionProps["mod_authors"]?.toString()?.trim()
+def modGroupId     = versionProps["mod_group_id"]?.toString()?.trim()
+def modDescription = versionProps["mod_description"]?.toString()?.trim()
+// British spelling in properties → normalized in build
+def modLicense     = versionProps["mod_licence"]?.toString()?.trim()
+
+// Optionally expose them as project properties (if you want project.mod_* elsewhere)
+ext.mod_version     = modVersion
+ext.mod_name        = modName
+ext.mod_id          = modId
+ext.mod_authors     = modAuthors
+ext.mod_group_id    = modGroupId
+ext.mod_description = modDescription
+ext.mod_license     = modLicense
+
+// --- Apply to project identity ---
+version = modVersion
+group = modGroupId   // instead of project.maven_group
+
+repositories {
+    // Add extra mod repos here if needed.
+}
+
+loom {
+    splitEnvironmentSourceSets()
+    mods {
+        "${modId}" {     // was "modid"
+            sourceSet sourceSets.main
+            sourceSet sourceSets.client
+        }
+    }
+}
+
+dependencies {
+    // Minecraft / loader / Fabric API versions still from gradle.properties
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    implementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+}
+
+processResources {
+    // from gradle.properties
+    inputs.property "version",            project.version
+    inputs.property "loader_version",     project.loader_version
+    inputs.property "minecraft_version",  project.minecraft_version
+    // from version.properties (we exported them as project.mod_*)
+    inputs.property "mod_id",             project.mod_id
+    inputs.property "mod_name",           project.mod_name
+    inputs.property "mod_authors",        project.mod_authors
+    inputs.property "mod_description",    project.mod_description
+    inputs.property "mod_license",        project.mod_license
+    filteringCharset "UTF-8"
+    filesMatching("fabric.mod.json") {
+        expand(
+                "version"           : project.version,
+                "loader_version"    : project.loader_version,
+                "minecraft_version" : project.minecraft_version,
+                "mod_id"            : project.mod_id,
+                "mod_name"          : project.mod_name,
+                "mod_authors"       : project.mod_authors,
+                "mod_description"   : project.mod_description,
+                "mod_license"       : project.mod_license,
+        )
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    it.options.release = 25
+}
+
+java {
+    withSourcesJar()
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(25)
+    }
+    sourceCompatibility = JavaVersion.VERSION_25
+    targetCompatibility = JavaVersion.VERSION_25
+}
+
+jar {
+    def projectName = project.name
+    inputs.property "projectName", projectName
+    from("LICENSE") {
+        rename { "${it}_$projectName" }
+    }
+}
+
+publishing {
+    publications {
+        create("mavenJava", MavenPublication) {
+            from components.java
+        }
+    }
+    repositories {
+        // publishing repos here if needed
+    }
+}

@@ -76,6 +76,15 @@
         <option name="resolveExternalAnnotations" value="true" />
       </GradleProjectSettings>
       <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/Versions/Fabric/26.2" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/Versions/Fabric/26.2" />
+          </set>
+        </option>
+        <option name="resolveExternalAnnotations" value="true" />
+      </GradleProjectSettings>
+      <GradleProjectSettings>
         <option name="externalProjectPath" value="$PROJECT_DIR$/Versions/Neo-Forge/1.21.1" />
         <option name="modules">
           <set>
@@ -143,6 +152,15 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$/Versions/Neo-Forge/26.1" />
+          </set>
+        </option>
+        <option name="resolveExternalAnnotations" value="true" />
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/Versions/Neo-Forge/26.2" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/Versions/Neo-Forge/26.2" />
           </set>
         </option>
         <option name="resolveExternalAnnotations" value="true" />
