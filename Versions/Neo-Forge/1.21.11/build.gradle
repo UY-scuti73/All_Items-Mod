@@ -1,3 +1,6 @@
+import org.gradle.jvm.toolchain.JavaLanguageVersion
+import org.gradle.language.jvm.tasks.ProcessResources
+
 plugins {
     id 'java-library'
     id 'maven-publish'
@@ -17,10 +20,9 @@ def modId          = versionProps["mod_id"]?.toString()?.trim()
 def modAuthors     = versionProps["mod_authors"]?.toString()?.trim()
 def modGroupId     = versionProps["mod_group_id"]?.toString()?.trim()
 def modDescription = versionProps["mod_description"]?.toString()?.trim()
-
-// version.properties uses "mod_licence" (British spelling).
-// We normalize to "mod_license" so the rest of the build can use that key.
 def modLicense     = versionProps["mod_licence"]?.toString()?.trim()
+def versionControl = versionProps["version_control"]?.toString()?.trim()
+def discordLink    = versionProps["discord_link"]?.toString()?.trim()
 
 // --- Apply to project identity ---
 
@@ -123,6 +125,8 @@ def generateModMetadata = tasks.register("generateModMetadata", ProcessResources
             mod_version            : modVersion,
             mod_authors            : modAuthors,
             mod_description        : modDescription,
+            version_control        : versionControl,
+            discord_link           : discordLink
     ]
 
     inputs.properties replaceProperties
@@ -150,7 +154,7 @@ tasks.named("processResources") {
 
 publishing {
     publications {
-        register('mavenJava', MavenPublication) {
+        register('mavenJava', org.gradle.api.publish.maven.MavenPublication) {
             from components.java
         }
     }

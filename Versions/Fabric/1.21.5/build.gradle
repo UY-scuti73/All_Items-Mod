@@ -11,17 +11,18 @@ plugins {
 def versionProps = new Properties()
 file("../../version.properties").withInputStream { versionProps.load(it) }
 
-// Bind and trim the values
 def modVersion     = versionProps["mod_version"]?.toString()?.trim()
 def modName        = versionProps["mod_name"]?.toString()?.trim()
 def modId          = versionProps["mod_id"]?.toString()?.trim()
 def modAuthors     = versionProps["mod_authors"]?.toString()?.trim()
 def modGroupId     = versionProps["mod_group_id"]?.toString()?.trim()
 def modDescription = versionProps["mod_description"]?.toString()?.trim()
-// British spelling in properties → normalized in build
+
 def modLicense     = versionProps["mod_licence"]?.toString()?.trim()
 
-// Export as project properties (optional but convenient)
+def versionControl = versionProps["version_control"]?.toString()?.trim()
+def discordLink    = versionProps["discord_link"]?.toString()?.trim()
+
 ext.mod_version     = modVersion
 ext.mod_name        = modName
 ext.mod_id          = modId
@@ -29,14 +30,13 @@ ext.mod_authors     = modAuthors
 ext.mod_group_id    = modGroupId
 ext.mod_description = modDescription
 ext.mod_license     = modLicense
+ext.version_control = versionControl
+ext.discord_link    = discordLink
 
-// --- Apply to project identity ---
-// Use mod_group_id from version.properties as the Maven group
 version = modVersion
 group = modGroupId
 
 base {
-    // If archives_base_name is defined in gradle.properties, use it; otherwise default to modId
     archivesName = project.findProperty("archives_base_name") ?: modId
 }
 
@@ -57,7 +57,6 @@ fabricApi {
 }
 
 repositories {
-    // extra mod repos here if needed
 }
 
 dependencies {
@@ -78,6 +77,8 @@ processResources {
     inputs.property "mod_authors",        project.mod_authors
     inputs.property "mod_description",    project.mod_description
     inputs.property "mod_license",        project.mod_license
+    inputs.property "version_control",    project.version_control
+    inputs.property "discord_link",       project.discord_link
 
     filteringCharset "UTF-8"
 
@@ -91,6 +92,8 @@ processResources {
                 "mod_authors"       : project.mod_authors,
                 "mod_description"   : project.mod_description,
                 "mod_license"       : project.mod_license,
+                "version_control"   : project.version_control,
+                "discord_link"      : project.discord_link
         )
     }
 }

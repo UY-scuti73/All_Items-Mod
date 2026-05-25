@@ -11,6 +11,8 @@ logoBlur = false
 authors = "${mod_authors}"
 description = '''${mod_description}'''
 
+displayURL = "${version_control}"
+
 [[mixins]]
 config = "${mod_id}.mixins.json"
 

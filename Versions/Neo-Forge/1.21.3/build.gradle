@@ -19,9 +19,9 @@ def modId          = versionProps["mod_id"]?.toString()?.trim()
 def modAuthors     = versionProps["mod_authors"]?.toString()?.trim()
 def modGroupId     = versionProps["mod_group_id"]?.toString()?.trim()
 def modDescription = versionProps["mod_description"]?.toString()?.trim()
-// version.properties uses "mod_licence" (British spelling).
-// We normalize to "mod_license" so the rest of the build can use that key.
 def modLicense     = versionProps["mod_licence"]?.toString()?.trim()
+def versionControl     = versionProps["version_control"]?.toString()?.trim()
+def discordLink     = versionProps["discord_link"]?.toString()?.trim()
 
 // Export them as project properties so project.mod_id etc. work
 ext.mod_version     = modVersion
@@ -31,6 +31,8 @@ ext.mod_authors     = modAuthors
 ext.mod_group_id    = modGroupId
 ext.mod_description = modDescription
 ext.mod_license     = modLicense
+ext.version_control = versionControl
+ext.discord_link    = discordLink
 
 // --- Apply to project identity ---
 version = project.mod_version
@@ -131,6 +133,8 @@ def generateModMetadata = tasks.register("generateModMetadata", ProcessResources
             mod_version            : project.mod_version,
             mod_authors            : project.mod_authors,
             mod_description        : project.mod_description,
+            version_control        : project.version_control,
+            discord_link           : project.discord_link
     ]
 
     inputs.properties replaceProperties

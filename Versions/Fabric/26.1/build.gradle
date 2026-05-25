@@ -1,5 +1,3 @@
-import org.gradle.jvm.toolchain.JavaLanguageVersion
-
 plugins {
     id 'net.fabricmc.fabric-loom' version "${loom_version}"
     id 'maven-publish'
@@ -16,8 +14,9 @@ def modId          = versionProps["mod_id"]?.toString()?.trim()
 def modAuthors     = versionProps["mod_authors"]?.toString()?.trim()
 def modGroupId     = versionProps["mod_group_id"]?.toString()?.trim()
 def modDescription = versionProps["mod_description"]?.toString()?.trim()
-// British spelling in properties → normalized in build
 def modLicense     = versionProps["mod_licence"]?.toString()?.trim()
+def versionControl     = versionProps["version_control"]?.toString()?.trim()
+def discordLink     = versionProps["discord_link"]?.toString()?.trim()
 
 // Optionally expose them as project properties (if you want project.mod_* elsewhere)
 ext.mod_version     = modVersion
@@ -27,13 +26,14 @@ ext.mod_authors     = modAuthors
 ext.mod_group_id    = modGroupId
 ext.mod_description = modDescription
 ext.mod_license     = modLicense
+ext.version_control = versionControl
+ext.discord_link    = discordLink
 
 // --- Apply to project identity ---
 version = modVersion
 group = modGroupId   // instead of project.maven_group
 
 repositories {
-    // Add extra mod repos here if needed.
 }
 
 loom {
@@ -54,16 +54,18 @@ dependencies {
 }
 
 processResources {
-    // from gradle.properties
+    // From gradle.properties
     inputs.property "version",            project.version
     inputs.property "loader_version",     project.loader_version
     inputs.property "minecraft_version",  project.minecraft_version
-    // from version.properties (we exported them as project.mod_*)
+
     inputs.property "mod_id",             project.mod_id
     inputs.property "mod_name",           project.mod_name
     inputs.property "mod_authors",        project.mod_authors
     inputs.property "mod_description",    project.mod_description
     inputs.property "mod_license",        project.mod_license
+    inputs.property "version_control",    project.version_control
+    inputs.property "discord_link",       project.discord_link
     filteringCharset "UTF-8"
     filesMatching("fabric.mod.json") {
         expand(
@@ -75,6 +77,8 @@ processResources {
                 "mod_authors"       : project.mod_authors,
                 "mod_description"   : project.mod_description,
                 "mod_license"       : project.mod_license,
+                "version_control"   : project.version_control,
+                "discord_link"      : project.discord_link
         )
     }
 }
