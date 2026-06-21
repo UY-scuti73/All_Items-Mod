@@ -37,6 +37,6 @@ public class onClickEvent {
         main.ItemList.updateList();
 
         // Open the screen
-        client.setScreen(new VirtualChestScreen(filtered));
+        client.setScreenAndShow(new VirtualChestScreen(filtered));
     }
 }

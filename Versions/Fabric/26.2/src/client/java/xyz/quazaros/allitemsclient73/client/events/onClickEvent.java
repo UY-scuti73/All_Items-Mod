@@ -41,6 +41,6 @@ public class onClickEvent {
         }
 
         Allitems73Client.ItemList.updateList();
-        client.setScreen(new VirtualChestScreen(filtered));
+        client.setScreenAndShow(new VirtualChestScreen(filtered));
     }
 }
